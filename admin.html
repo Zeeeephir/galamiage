@@ -3,495 +3,359 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎛️ DJ Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <title>Gala Miage — DJ Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #060608;
-      --surface: #0e0e14;
-      --card: #13131c;
-      --border: #1e1e2e;
-      --neon-pink: #ff2d78;
-      --neon-cyan: #00f0ff;
-      --neon-purple: #b94eff;
-      --neon-green: #00ff9d;
-      --text: #e8e8f0;
-      --muted: #5a5a7a;
+      --bg: #04040a;
+      --surface: #0a0a12;
+      --card: #0f0f1a;
+      --card2: #141424;
+      --border: #1c1c30;
+      --border2: #252540;
+      --pink: #ff2060;
+      --cyan: #00e5ff;
+      --purple: #a855f7;
+      --green: #00ff9d;
+      --text: #eeeef5;
+      --muted: #52527a;
+      --muted2: #3a3a5c;
     }
 
-    html, body {
-      height: 100%;
+    html { scroll-behavior: smooth; }
+
+    body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 50% 40% at 10% 20%, rgba(0,240,255,0.1) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 50% at 90% 70%, rgba(185,78,255,0.1) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.15;
+      animation: float-orb 12s ease-in-out infinite;
+    }
+    .orb1 { width: 500px; height: 500px; background: var(--cyan);   top: -150px; right: -100px; animation-delay: 0s; }
+    .orb2 { width: 400px; height: 400px; background: var(--purple); bottom: -100px; left: -80px; animation-delay: -5s; }
+
+    @keyframes float-orb {
+      0%,100%{ transform: translate(0,0) scale(1); }
+      50%    { transform: translate(20px,-30px) scale(1.04); }
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
+    .grid-overlay {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background-image:
-        linear-gradient(rgba(0,240,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 72px 72px;
     }
 
-    /* === LOGIN SCREEN === */
+    /* ── LOGIN ── */
     #login-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
+      position: fixed; inset: 0; z-index: 1000;
       background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 0;
+      display: flex; align-items: center; justify-content: center;
     }
 
     #login-screen::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,240,255,0.08) 0%, transparent 70%);
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,229,255,0.07) 0%, transparent 70%);
       pointer-events: none;
     }
 
     .login-card {
-      width: 100%;
-      max-width: 400px;
+      width: 100%; max-width: 400px;
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 44px 40px;
-      position: relative;
-      overflow: hidden;
+      border: 1px solid var(--border2);
+      border-radius: 28px;
+      padding: 48px 40px;
+      position: relative; overflow: hidden;
       margin: 20px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03) inset;
+      animation: fade-up 0.6s ease both;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     .login-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
     }
 
-    .login-logo {
-      text-align: center;
-      margin-bottom: 32px;
-    }
+    .login-logo { text-align: center; margin-bottom: 36px; }
 
     .login-icon {
-      width: 64px; height: 64px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      margin: 0 auto 16px;
-      box-shadow: 0 0 32px rgba(0,240,255,0.4);
+      width: 68px; height: 68px; border-radius: 20px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; margin: 0 auto 18px;
+      box-shadow: 0 0 40px rgba(0,229,255,0.35);
     }
 
     .login-title {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 32px;
-      letter-spacing: 3px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-family: 'Bebas Neue', cursive; font-size: 34px; letter-spacing: 4px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
     .login-sub {
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-top: 4px;
+      font-size: 11px; color: var(--muted); letter-spacing: 2.5px;
+      text-transform: uppercase; margin-top: 6px;
     }
 
-    .login-field {
-      margin-bottom: 20px;
-    }
+    .login-field { margin-bottom: 22px; }
 
     .login-field label {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
+      display: block; font-size: 10px; font-weight: 600;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
     }
 
     .login-field input {
       width: 100%;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 18px;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      border: 1px solid var(--border2);
+      border-radius: 12px; padding: 15px 20px;
+      color: var(--text); font-family: 'Outfit', sans-serif; font-size: 15px;
+      outline: none; transition: border-color 0.25s, box-shadow 0.25s;
     }
 
     .login-field input:focus {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 0 3px rgba(0,240,255,0.15);
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0,229,255,0.12);
     }
 
     .login-btn {
-      width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-      color: #060608;
-      font-family: 'Bebas Neue', cursive;
-      font-size: 18px;
-      letter-spacing: 3px;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(0,240,255,0.3);
+      width: 100%; padding: 17px;
+      border: none; border-radius: 14px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: #04040a; font-family: 'Bebas Neue', cursive;
+      font-size: 19px; letter-spacing: 4px;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.25s;
+      box-shadow: 0 6px 30px rgba(0,229,255,0.3);
       margin-top: 4px;
     }
 
-    .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,240,255,0.5);
-    }
+    .login-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,229,255,0.5); }
+    .login-btn:active { transform: translateY(0); }
 
     .login-error {
-      margin-top: 14px;
-      text-align: center;
-      font-size: 13px;
-      color: var(--neon-pink);
-      min-height: 20px;
+      margin-top: 14px; text-align: center;
+      font-size: 13px; color: var(--pink); min-height: 20px;
     }
 
-    /* === ADMIN PANEL === */
-    #admin-panel {
-      display: none;
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-    }
+    /* ── ADMIN PANEL ── */
+    #admin-panel { display: none; position: relative; z-index: 1; min-height: 100vh; }
 
-    /* Top bar */
+    /* Topbar */
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(6,6,8,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(4,4,10,0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border2);
+      padding: 0 32px; height: 66px;
+      display: flex; align-items: center; justify-content: space-between;
     }
 
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .topbar-left { display: flex; align-items: center; gap: 14px; }
 
     .topbar-icon {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
     }
 
     .topbar-title {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 22px;
-      letter-spacing: 3px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
 
     .live-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--neon-green);
+      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--green);
     }
 
     .live-dot-green {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--neon-green);
-      box-shadow: 0 0 10px var(--neon-green);
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 12px var(--green);
       animation: blink 1.2s ease-in-out infinite;
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
 
     .logout-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      letter-spacing: 1px;
-      padding: 8px 14px;
-      cursor: pointer;
+      background: transparent; border: 1px solid var(--border2);
+      border-radius: 8px; color: var(--muted);
+      font-family: 'Outfit', sans-serif; font-size: 12px;
+      letter-spacing: 1px; padding: 8px 14px; cursor: pointer;
       transition: all 0.2s;
     }
-    .logout-btn:hover {
-      border-color: var(--neon-pink);
-      color: var(--neon-pink);
-    }
+    .logout-btn:hover { border-color: var(--pink); color: var(--pink); }
 
-    /* Main content */
-    .content {
-      padding: 40px 32px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    /* Content */
+    .content { padding: 40px 32px; max-width: 860px; margin: 0 auto; }
 
+    /* Stats */
     .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 36px;
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 16px; margin-bottom: 40px;
     }
 
     .stat-card {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 24px;
-      position: relative;
-      overflow: hidden;
+      border: 1px solid var(--border2);
+      border-radius: 18px; padding: 22px 26px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
     }
+
+    .stat-card:hover { transform: translateY(-2px); }
 
     .stat-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
     }
-
-    .stat-card:nth-child(1)::after { background: linear-gradient(90deg, var(--neon-cyan), transparent); }
-    .stat-card:nth-child(2)::after { background: linear-gradient(90deg, var(--neon-pink), transparent); }
-    .stat-card:nth-child(3)::after { background: linear-gradient(90deg, var(--neon-purple), transparent); }
+    .stat-card:nth-child(1)::after { background: linear-gradient(90deg, var(--cyan), transparent); }
+    .stat-card:nth-child(2)::after { background: linear-gradient(90deg, var(--pink), transparent); }
+    .stat-card:nth-child(3)::after { background: linear-gradient(90deg, var(--purple), transparent); }
 
     .stat-label {
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
+      font-size: 10px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
     }
 
-    .stat-value {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 42px;
-      line-height: 1;
-    }
+    .stat-value { font-family: 'Bebas Neue', cursive; font-size: 48px; line-height: 1; }
+    .stat-card:nth-child(1) .stat-value { color: var(--cyan); }
+    .stat-card:nth-child(2) .stat-value { color: var(--pink); }
+    .stat-card:nth-child(3) .stat-value { color: var(--purple); }
 
-    .stat-card:nth-child(1) .stat-value { color: var(--neon-cyan); }
-    .stat-card:nth-child(2) .stat-value { color: var(--neon-pink); }
-    .stat-card:nth-child(3) .stat-value { color: var(--neon-purple); }
-
-    /* Section header */
+    /* Section */
     .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 20px;
     }
 
     .section-title {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 24px;
-      letter-spacing: 2px;
-      color: var(--neon-cyan);
+      font-family: 'Bebas Neue', cursive; font-size: 24px;
+      letter-spacing: 3px; color: var(--cyan);
     }
 
-    .clear-all-btn {
+    .clear-btn {
       background: transparent;
-      border: 1px solid rgba(255,45,120,0.4);
-      border-radius: 8px;
-      color: var(--neon-pink);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      padding: 8px 16px;
-      cursor: pointer;
+      border: 1px solid rgba(255,32,96,0.3);
+      border-radius: 10px; color: var(--pink);
+      font-family: 'Outfit', sans-serif; font-size: 12px;
+      font-weight: 500; letter-spacing: 1px;
+      padding: 9px 18px; cursor: pointer;
       transition: all 0.2s;
-      letter-spacing: 1px;
     }
+    .clear-btn:hover { background: rgba(255,32,96,0.1); border-color: var(--pink); }
 
-    .clear-all-btn:hover {
-      background: rgba(255,45,120,0.1);
-      border-color: var(--neon-pink);
-    }
-
-    /* Track cards admin */
+    /* Track cards */
     .admin-track {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      animation: slide-in 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      border-radius: 18px; padding: 20px 24px; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 18px;
+      animation: slide-in 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
       transition: border-color 0.2s, transform 0.2s;
     }
 
     @keyframes slide-in {
-      from { opacity: 0; transform: translateX(-20px); }
+      from { opacity: 0; transform: translateX(-24px); }
       to   { opacity: 1; transform: translateX(0); }
     }
 
-    .admin-track:hover {
-      border-color: rgba(0,240,255,0.2);
-      transform: translateX(4px);
-    }
+    .admin-track:hover { border-color: rgba(0,229,255,0.2); transform: translateX(5px); }
 
-    .admin-track.removing {
-      animation: remove-out 0.4s forwards;
-    }
+    .admin-track.removing { animation: remove-out 0.35s forwards; }
 
     @keyframes remove-out {
-      to { opacity: 0; transform: translateX(40px) scale(0.95); max-height: 0; padding: 0; margin: 0; }
+      to { opacity: 0; transform: translateX(50px) scale(0.95); max-height: 0; padding: 0; margin: 0; overflow: hidden; }
     }
 
     .track-num-admin {
-      font-family: 'Bebas Neue', cursive;
-      font-size: 32px;
-      color: rgba(255,255,255,0.08);
-      min-width: 40px;
-      line-height: 1;
+      font-family: 'Bebas Neue', cursive; font-size: 34px;
+      color: rgba(255,255,255,0.06); min-width: 44px; line-height: 1;
     }
 
     .admin-track-info { flex: 1; min-width: 0; }
 
     .admin-track-name {
-      font-size: 16px;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 16px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    .admin-track-artist {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
+    .admin-track-artist { font-size: 13px; color: var(--muted); margin-top: 4px; }
 
     .admin-track-requester {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 8px;
-      background: rgba(0,240,255,0.08);
-      border: 1px solid rgba(0,240,255,0.15);
-      border-radius: 20px;
-      padding: 3px 12px;
-      font-size: 12px;
-      color: var(--neon-cyan);
-      letter-spacing: 1px;
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 9px;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.15);
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 11px; color: var(--cyan); letter-spacing: 0.5px;
     }
 
     .admin-track-time {
-      font-size: 11px;
-      color: var(--muted);
-      text-align: right;
-      min-width: 60px;
+      font-size: 11px; color: var(--muted2);
+      text-align: right; min-width: 48px; flex-shrink: 0;
     }
 
     .delete-btn {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,45,120,0.3);
-      background: rgba(255,45,120,0.08);
-      color: var(--neon-pink);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
+      width: 42px; height: 42px; border-radius: 12px;
+      border: 1px solid rgba(255,32,96,0.25);
+      background: rgba(255,32,96,0.07);
+      color: var(--pink); font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; flex-shrink: 0;
     }
 
     .delete-btn:hover {
-      background: rgba(255,45,120,0.25);
-      border-color: var(--neon-pink);
+      background: rgba(255,32,96,0.22);
+      border-color: var(--pink);
       transform: scale(1.1);
-      box-shadow: 0 0 16px rgba(255,45,120,0.3);
+      box-shadow: 0 0 20px rgba(255,32,96,0.3);
     }
 
+    /* Empty */
     .empty-admin {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--muted);
+      text-align: center; padding: 80px 20px;
     }
+    .e-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.25; }
+    .e-text { font-family: 'Bebas Neue', cursive; font-size: 26px; letter-spacing: 3px; color: var(--muted); }
+    .e-sub { font-size: 14px; margin-top: 10px; color: var(--muted2); }
 
-    .empty-admin .e-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.3; }
-    .empty-admin .e-text { font-family: 'Bebas Neue', cursive; font-size: 24px; letter-spacing: 2px; color: var(--muted); }
-    .empty-admin .e-sub { font-size: 14px; margin-top: 8px; opacity: 0.6; }
+    /* Footer */
+    .admin-footer {
+      margin-top: 60px; text-align: center;
+      color: var(--muted2); font-size: 12px; letter-spacing: 1.5px;
+      padding-bottom: 40px;
+    }
+    .admin-footer .nn { color: var(--cyan); font-weight: 600; letter-spacing: 2px; }
 
     /* Toast */
     .toast {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      transform: translateY(80px);
-      background: var(--card);
-      border: 1px solid var(--neon-green);
-      border-radius: 12px;
-      padding: 14px 24px;
-      font-size: 14px;
-      color: var(--neon-green);
-      box-shadow: 0 0 24px rgba(0,255,157,0.2);
-      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      position: fixed; bottom: 32px; right: 32px;
+      transform: translateY(100px);
+      background: var(--card2);
+      border: 1px solid var(--green);
+      border-radius: 14px; padding: 14px 24px;
+      font-size: 14px; color: var(--green);
+      box-shadow: 0 8px 40px rgba(0,255,157,0.2);
+      transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
       z-index: 200;
     }
     .toast.show { transform: translateY(0); }
@@ -499,12 +363,18 @@
     @media (max-width: 600px) {
       .stats-row { grid-template-columns: 1fr 1fr; }
       .stats-row .stat-card:last-child { grid-column: span 2; }
-      .content { padding: 24px 16px; }
+      .content { padding: 24px 14px; }
       .topbar { padding: 0 16px; }
     }
   </style>
 </head>
 <body>
+
+  <div class="bg-layer">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+  </div>
+  <div class="grid-overlay"></div>
 
   <!-- LOGIN -->
   <div id="login-screen">
@@ -512,11 +382,12 @@
       <div class="login-logo">
         <div class="login-icon">🎛️</div>
         <div class="login-title">DJ ADMIN</div>
-        <div class="login-sub">Espace réservé</div>
+        <div class="login-sub">Gala Miage — Espace réservé</div>
       </div>
       <div class="login-field">
         <label>Mot de passe</label>
-        <input type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/>
+        <input type="password" id="pwd-input" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter') login()"/>
       </div>
       <button class="login-btn" onclick="login()">ACCÉDER AU PANEL ⚡</button>
       <div class="login-error" id="login-error"></div>
@@ -528,7 +399,7 @@
     <div class="topbar">
       <div class="topbar-left">
         <div class="topbar-icon">🎛️</div>
-        <div class="topbar-title">DJ ADMIN</div>
+        <div class="topbar-title">GALA MIAGE — ADMIN</div>
       </div>
       <div class="topbar-right">
         <div class="live-indicator">
@@ -540,13 +411,14 @@
     </div>
 
     <div class="content">
+
       <div class="stats-row">
         <div class="stat-card">
-          <div class="stat-label">Requêtes en attente</div>
+          <div class="stat-label">En attente</div>
           <div class="stat-value" id="stat-pending">0</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Supprimées ce soir</div>
+          <div class="stat-label">Supprimées</div>
           <div class="stat-value" id="stat-deleted">0</div>
         </div>
         <div class="stat-card">
@@ -556,8 +428,8 @@
       </div>
 
       <div class="section-header">
-        <div class="section-title">📋 Requêtes</div>
-        <button class="clear-all-btn" onclick="clearAll()">🗑 Tout effacer</button>
+        <div class="section-title">📋 Requêtes en direct</div>
+        <button class="clear-btn" onclick="clearAll()">🗑 Tout effacer</button>
       </div>
 
       <div id="admin-list">
@@ -567,39 +439,41 @@
           <div class="e-sub">Elles apparaîtront ici en temps réel</div>
         </div>
       </div>
+
+      <div class="admin-footer">
+        Fait avec ❤️ par <span class="nn">NoisyNeighbors</span>
+      </div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // 🔧 REMPLACE CES VALEURS PAR TES INFOS FIREBASE (mêmes que index.html)
     const firebaseConfig = {
-      apiKey: "VOTRE_API_KEY",
-      authDomain: "VOTRE_PROJECT.firebaseapp.com",
-      databaseURL: "https://VOTRE_PROJECT-default-rtdb.firebaseio.com",
-      projectId: "VOTRE_PROJECT",
-      storageBucket: "VOTRE_PROJECT.appspot.com",
-      messagingSenderId: "VOTRE_ID",
-      appId: "VOTRE_APP_ID"
+      apiKey: "AIzaSyDTGFIBqM0D8IfxdcRQeffAAnSz138RrwQ",
+      authDomain: "galamiage-22260.firebaseapp.com",
+      databaseURL: "https://galamiage-22260-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "galamiage-22260",
+      storageBucket: "galamiage-22260.firebasestorage.app",
+      messagingSenderId: "1004747524329",
+      appId: "1:1004747524329:web:5f8002f086e8c8c2e7c878",
+      measurementId: "G-10LWNY8TFR"
     };
 
-    // 🔧 CHANGE CE MOT DE PASSE
-    const ADMIN_PASSWORD = "dj2024";
+    // 🔧 CHANGE CE MOT DE PASSE AVANT LA SOIRÉE
+    const ADMIN_PASSWORD = "noisyneighbors2024";
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const db  = getDatabase(app);
     const requestsRef = ref(db, 'requests');
 
     let deletedCount = 0;
     let totalReceived = 0;
     let currentItems = [];
 
-    // Login
     window.login = function() {
       const val = document.getElementById('pwd-input').value;
       if (val === ADMIN_PASSWORD) {
@@ -607,9 +481,10 @@
         document.getElementById('admin-panel').style.display = 'block';
         startListening();
       } else {
-        document.getElementById('login-error').textContent = '❌ Mot de passe incorrect';
+        const err = document.getElementById('login-error');
+        err.textContent = '❌ Mot de passe incorrect';
         document.getElementById('pwd-input').value = '';
-        setTimeout(() => document.getElementById('login-error').textContent = '', 2500);
+        setTimeout(() => err.textContent = '', 2500);
       }
     };
 
@@ -644,15 +519,15 @@
         updateStats(currentItems.length);
 
         list.innerHTML = currentItems.map((item, i) => `
-          <div class="admin-track" id="item-${item.id}">
-            <div class="track-num-admin">${String(i + 1).padStart(2, '0')}</div>
+          <div class="admin-track" id="item-${item.id}" style="animation-delay:${i*0.04}s">
+            <div class="track-num-admin">${String(i+1).padStart(2,'0')}</div>
             <div class="admin-track-info">
               <div class="admin-track-name">${esc(item.track)}</div>
               <div class="admin-track-artist">${esc(item.artist)}</div>
               <div class="admin-track-requester">👤 ${esc(item.name)}</div>
             </div>
             <div class="admin-track-time">${timeAgo(item.timestamp)}</div>
-            <button class="delete-btn" onclick="deleteItem('${item.id}', '${esc(item.track)}')" title="Supprimer">✕</button>
+            <button class="delete-btn" onclick="deleteItem('${item.id}','${esc(item.track)}')" title="Supprimer">✕</button>
           </div>
         `).join('');
       });
@@ -660,10 +535,7 @@
 
     window.deleteItem = async function(id, trackName) {
       const el = document.getElementById('item-' + id);
-      if (el) {
-        el.classList.add('removing');
-        await new Promise(r => setTimeout(r, 380));
-      }
+      if (el) { el.classList.add('removing'); await new Promise(r => setTimeout(r, 330)); }
       await remove(ref(db, 'requests/' + id));
       deletedCount++;
       totalReceived = Math.max(totalReceived, currentItems.length + deletedCount);
@@ -674,7 +546,7 @@
 
     window.clearAll = async function() {
       if (!currentItems.length) return;
-      if (!confirm(`Effacer les ${currentItems.length} requête(s) ?`)) return;
+      if (!confirm(`Vider les ${currentItems.length} requête(s) ?`)) return;
       deletedCount += currentItems.length;
       totalReceived = Math.max(totalReceived, deletedCount);
       await remove(requestsRef);
@@ -689,14 +561,15 @@
     }
 
     function timeAgo(ts) {
-      const diff = Math.floor((Date.now() - ts) / 1000);
-      if (diff < 60) return diff + 's';
-      if (diff < 3600) return Math.floor(diff / 60) + 'min';
-      return Math.floor(diff / 3600) + 'h';
+      const d = Math.floor((Date.now() - ts) / 1000);
+      if (d < 60) return d + 's';
+      if (d < 3600) return Math.floor(d / 60) + 'min';
+      return Math.floor(d / 3600) + 'h';
     }
 
     function esc(str) {
-      return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      return String(str).replace(/[&<>"']/g, c =>
+        ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
     function showToast(msg) {
